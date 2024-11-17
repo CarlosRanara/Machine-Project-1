@@ -150,33 +150,41 @@ void displayStatus(int week, int day, int energon, int stacksInventory) {
  * @param generationCost The cost to produce one Energon cube.
  */
 void generateCubes(int *energon, int *stacksInventory, int generationCost) {
-    int stacks = 0;
+    int stacks, validProduction = 0;
     char proceed;
 
     printf("Production cost for this week is %d Energon for 1 cube.\n", generationCost);
     printf("It will cost %d Energon to produce 1 stack.\n", generationCost * 10);
 
-    printf("How many stacks do you wish to produce for this week? ");
-    scanf("%d", &stacks);
+    while (validProduction == 0) {
+            printf("How many stacks do you wish to produce for this week? ");
+            
+            if (scanf("%d", &stacks) == 1 && stacks >= 0) {
+                int total_cost = generationCost * 10 * stacks;
 
-    int totalCost = generationCost * 10 * stacks;
+                if (total_cost <= *energon) {
+                    printf("%d stacks will cost %d Energon, proceed? (y/n) ", stacks, total_cost);
+                    scanf(" %c", &proceed);
 
-    if (stacks >= 0 && totalCost <= *energon) {
-        printf("%d stacks will cost %d Energon, proceed? (y/n) ", stacks, totalCost);
-        scanf(" %c", &proceed);
-
-        if (proceed == 'y' || proceed == 'Y') {
-            *energon -= totalCost;
-            *stacksInventory += stacks;
-            printf("%d stacks produced.\n", stacks);
-        } else {
-            printf("Production canceled.\n");
+                    if (proceed == 'y' || proceed == 'Y') {
+                        *energon -= total_cost;
+                        *stacksInventory+= stacks;
+                        printf("%d stacks produced.\n", stacks);
+                        validProduction = 1;
+                    } else if (proceed == 'n' || proceed == 'N') {
+                        printf("Production canceled. Let's try again.\n");
+                    } else {
+                        printf("Invalid choice. Please enter 'y' or 'n'.\n");
+                    }
+                } else {
+                    printf("Not enough Energon to produce that many stacks! Try a smaller amount.\n");
+                }
+            } else {
+                printf("Invalid input. Please enter a non-negative integer.\n");
+            
+            }
         }
-    } else {
-        printf("Invalid production request. Not enough Energon or invalid input.\n");
     }
-}
-
 /* This function allows the player to sell Energon cubes from their inventory at market prices.
  * Precondition: stacksInventory must be non-negative and the player must have cubes to sell.
  * @param energon Pointer to the player's current Energon balance.
@@ -185,38 +193,59 @@ void generateCubes(int *energon, int *stacksInventory, int generationCost) {
  * @param currentTrend The current market trend affecting the selling price.
  */
 void sellCubes(int *energon, int *stacksInventory, int generationCost, int currentTrend) {
-    if (*stacksInventory > 0) {
-        int pricePerCube = randomPrice(generationCost, currentTrend);
+    int pricePerCube = randomPrice(generationCost, currentTrend);
+    int validSale = 0;
+
+    // Check if there are stacks to sell and a valid price
+    if (*stacksInventory > 0 && pricePerCube >= 0) {
         int salePricePerStack = pricePerCube * 10;
+        int stacks;
+        char proceed;
 
         printf("Swindle is buying Energon Cubes for %d Energon per cube.\n", pricePerCube);
         printf("You can earn %d Energon per stack.\n", salePricePerStack);
 
-        int stacks = 0;
-        char proceed;
+        // Loop until valid sale input is given
+        while (validSale == 0) {
+            printf("How many stacks do you wish to sell? ");
+            
+            // Input validation
+            if (scanf("%d", &stacks) == 1 && stacks >= 0) { //scanf controversial easy fix if its not allowed get char maybe still dont fully understand
+                if (stacks <= *stacksInventory) {
+                    printf("%d stacks are about to be sold, proceed? (y/n) ", stacks);
+                    
 
-        printf("How many stacks do you wish to sell? ");
-        scanf("%d", &stacks);
-
-        if (stacks >= 0 && stacks <= *stacksInventory) {
-            printf("%d stacks are about to be sold, proceed? (y/n) ", stacks);
-            scanf(" %c", &proceed);
-
-            if (proceed == 'y' || proceed == 'Y') {
-                int totalSale = salePricePerStack * stacks;
-                *energon += totalSale;
-                *stacksInventory -= stacks;
-                printf("%d stacks sold. You earned %d Energon.\n", stacks, totalSale);
+                    scanf(" %c", &proceed);
+                    if (proceed == 'y' || proceed == 'Y') {
+                        // Calculate earnings and update inventory
+                        int total_sale = salePricePerStack * stacks;
+                        *energon += total_sale;
+                        *stacksInventory -= stacks;
+                        printf("%d stacks sold.\n", stacks);
+                        printf("You earned %d Energon.\n", total_sale);
+                        validSale = 1;
+                    } else if (proceed == 'n' || proceed == 'N') {
+                        // User canceled sale
+                        printf("Sale canceled.\n");
+                        validSale = 0;
+                    } else {
+                        printf("Invalid choice. Please enter 'y' or 'n'.\n");
+                    }
+                } else {
+                    printf("Not enough stacks in inventory. You have %d stacks available.\n", *stacksInventory);
+                }
             } else {
-                printf("Sale canceled.\n");
+                printf("Invalid input. Please enter a non-negative integer.\n");
+                 
             }
-        } else {
-            printf("Invalid sale request. Not enough stacks in inventory or invalid input.\n");
         }
     } else {
-        printf("No stacks available to sell.\n");
+        if (*stacksInventory <= 0) printf("No stacks available to sell.\n");
+        if (pricePerCube < 0) printf("Sale aborted due to invalid market trend.\n");
     }
 }
+
+
 
 /* This function handles the expiration of Energon cubes at the end of the week (day 7).
  * All cubes in inventory expire at the end of the 7th day.
