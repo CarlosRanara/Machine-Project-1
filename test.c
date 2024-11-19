@@ -1,70 +1,38 @@
-/***************************************************************
-*************
-This is to certify that this project is my own work, based on my personal efforts
-in studying and applying the concepts learned. I have constructed the
-functions and their respective algorithms and corresponding code by myself.
-The program was run, tested, and debugged by my own efforts. I further
-certify that I have not copied in part or whole or otherwise plagiarized the
-work of other students and/or persons.
-<Your Full Name>, DLSU ID# <Your ID Number>
-***************************************************************
-************/
-
-/*
-Description: This program simulates a simple resource management game where the player must manage Energon cubes. The player can generate and sell stacks of Energon cubes, monitor their Energon balance, and make decisions based on market trends and production costs. The goal is to accumulate 1,000,000 Energon by the end of the game.
-
-Programmed by: <Your Name> <Your Section>
-Last modified: <Date>
-Version: 9.0
-[Acknowledgements: <List any sources, libraries, or tutorials used>]
-*/
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 
-// Define constants for trends that affect the market prices of cubes
-#define SCRAP 0     // Market trend where the price is low
-#define NOMINAL 1   // Standard market trend with moderate prices
-#define PRIMUS 2    // High-value market trend
+#define SCRAP 0
+#define NOMINAL 1
+#define PRIMUS 2
 
-// Function prototypes
 int randomPrice(int generationCost, int currentTrends);
 void displayStatus(int week, int day, int energon, int stacksInventory);
 void generateCubes(int *energon, int *stacksInventory, int generationCost);
 void sellCubes(int *energon, int *stacksInventory, int generationCost, int currentTrend);
 void expireCubes(int *stacksInventory);
 
-// Testing menu prototypes
 void testRandomPrice();
 void testDisplayStatus();
 void testGenerateCubes();
 void testSellCubes();
 void testExpireCubes();
 
-/*
- * Main function
- * -------------
- * Runs the game loop where the player manages Energon cubes across multiple weeks.
- * The player must produce and sell Energon cubes while watching market trends and
- * trying to reach the goal of 1,000,000 Energon.
- */
 int main() {
-    srand(time(0)); // Seed the random number generator
+    srand(time(0));
 
     int mode = 0;
 
-    // Prompt user for mode selection with validation
     while (1) {
         printf("Choose mode:\n");
         printf("1. Play game\n");
         printf("2. Run tests\n");
         printf("Enter your choice: ");
         if (scanf("%d", &mode) == 1 && (mode == 1 || mode == 2)) {
-            break; // Valid input
+            break;
         } else {
             printf("Invalid input. Please enter 1 or 2.\n");
-            while (getchar() != '\n'); // Clear input buffer
+            while (getchar() != '\n');
         }
     }
 
@@ -75,15 +43,14 @@ int main() {
         int gameOver = 0;
         int reachedGoal = 0;
 
-        // Developer mode
         char devMode;
         printf("Enter developer mode? (y/n): ");
         while (1) {
             if (scanf(" %c", &devMode) == 1 && (devMode == 'y' || devMode == 'Y' || devMode == 'n' || devMode == 'N')) {
-                break; // Valid input
+                break;
             } else {
                 printf("Invalid input. Please enter 'y' or 'n': ");
-                while (getchar() != '\n'); // Clear input buffer
+                while (getchar() != '\n');
             }
         }
 
@@ -91,25 +58,24 @@ int main() {
             printf("Enter starting Energon balance: ");
             while (scanf("%d", &energon) != 1 || energon < 0) {
                 printf("Invalid input. Please enter a non-negative integer: ");
-                while (getchar() != '\n'); // Clear input buffer
+                while (getchar() != '\n');
             }
 
             printf("Enter starting week (1-10): ");
             while (scanf("%d", &week) != 1 || week < 1 || week > 10) {
                 printf("Invalid week. Please enter a value between 1 and 10: ");
-                while (getchar() != '\n'); // Clear input buffer
+                while (getchar() != '\n');
             }
         }
 
-        // Main game loop
         while (week <= 10 && gameOver == 0) {
             printf("\n --- Week %d Day 1 ---\n", week);
             displayStatus(week, 1, energon, stacksInventory);
 
-            int generationCost = rand() % 41 + 80;  // Random generation cost between 80 and 120
+            int generationCost = rand() % 41 + 80;
             generateCubes(&energon, &stacksInventory, generationCost);
 
-            int currentTrend = rand() % 3;  // Random market trend (0, 1, or 2)
+            int currentTrend = rand() % 3;
 
             for (int day = 2; day <= 7; day++) {
                 printf("\n --- Week %d Day %d ---\n", week, day);
@@ -133,7 +99,6 @@ int main() {
 
         printf("Game over. Total Energon: %d\n", energon);
     } else if (mode == 2) {
-        // Testing menu
         while (1) {
             int choice;
             printf("\n--- Testing Menu ---\n");
@@ -158,14 +123,13 @@ int main() {
                 }
             } else {
                 printf("Invalid input. Please select a number between 1 and 6.\n");
-                while (getchar() != '\n'); // Clear input buffer
+                while (getchar() != '\n');
             }
         }
     }
 
     return 0;
 }
-
 
 // Function definitions for the main game logic and testing utilities remain unchanged...
 void testRandomPrice() {

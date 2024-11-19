@@ -68,37 +68,41 @@ int main() {
 
     // Main game loop, runs for 10 weeks or until the goal is reached
     while (week <= 10 && gameOver == 0) {
-        printf("\n --- Week %d Day 1 ---\n", week);
-        displayStatus(week, 1, energon, stacksInventory);
 
-        int generationCost = rand() % 41 + 80;  // Random generation cost between 80 and 120
-        generateCubes(&energon, &stacksInventory, generationCost);
-
-        int currentTrend = rand() % 3;  // Random market trend (0, 1, or 2)
-
-        for (int day = 2; day <= 7 && gameOver == 0; day++) {
-            printf("\n --- Week %d Day %d ---\n", week, day);
-            displayStatus(week, day, energon, stacksInventory);
-
-            sellCubes(&energon, &stacksInventory, generationCost, currentTrend);
-
-            if (energon >= 1000000) {
-                reachedGoal = 1;
-            }
-            if (energon < 800 && stacksInventory == 0) {
+        if (energon < 800 && stacksInventory == 0) {
                 printf("Game over! Not enough Energon to produce more stacks or sell.\n");
                 gameOver = 1;
             }
-        }
+        else {
+            printf("\n --- Week %d Day 1 ---\n", week);
+            displayStatus(week, 1, energon, stacksInventory);
 
-        if (gameOver == 0) {
-            expireCubes(&stacksInventory);
-            week++;
-        }
+            int generationCost = rand() % 41 + 80;  // Random generation cost between 80 and 120
+            generateCubes(&energon, &stacksInventory, generationCost);
 
-        if (reachedGoal == 1) {
-            printf("Congratulations! You reached 1,000,000 Energon during the game!\n");
-            gameOver = 1;
+            int currentTrend = rand() % 3;  // Random market trend (0, 1, or 2)
+
+            for (int day = 2; day <= 7 && gameOver == 0; day++) {
+                printf("\n --- Week %d Day %d ---\n", week, day);
+                displayStatus(week, day, energon, stacksInventory);
+
+                sellCubes(&energon, &stacksInventory, generationCost, currentTrend);
+
+                if (energon >= 1000000) {
+                    reachedGoal = 1;
+                }
+                
+            }
+
+            if (gameOver == 0) {
+                expireCubes(&stacksInventory);
+                week++;
+            }
+
+            if (reachedGoal == 1) {
+                printf("Congratulations! You reached 1,000,000 Energon during the game!\n");
+                gameOver = 1;
+            }
         }
     }
 
