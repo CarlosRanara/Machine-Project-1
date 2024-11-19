@@ -162,8 +162,9 @@ void generateCubes(int *energon, int *stacksInventory, int generationCost) {
 
     while (validProduction == 0) {
             printf("How many stacks do you wish to produce for this week? ");
+            scanf("%d", &stacks);
             
-            if (scanf("%d", &stacks) == 1 && stacks >= 0) {
+            if (stacks >= 0) {
                 int total_cost = generationCost * 10 * stacks;
 
                 if (total_cost <= *energon) {
@@ -212,9 +213,9 @@ void sellCubes(int *energon, int *stacksInventory, int generationCost, int curre
         // Loop until valid sale input is given
         while (validSale == 0) {
             printf("How many stacks do you wish to sell? ");
-            
+            scanf("%d", &stacks);
             // Input validation
-            if (scanf("%d", &stacks) == 1 && stacks >= 0) { //scanf controversial easy fix if its not allowed get char maybe still dont fully understand
+            if (stacks >= 0) { 
                 if (stacks <= *stacksInventory) {
                     printf("%d stacks are about to be sold, proceed? (y/n) ", stacks);
                     
