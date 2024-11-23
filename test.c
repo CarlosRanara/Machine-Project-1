@@ -249,7 +249,7 @@ void displayStatus(int week, int day, int energon, int stacksInventory) {
  * @param generationCost The cost to produce one Energon cube.
  */
 void generateCubes(int *energon, int *stacksInventory, int generationCost) {
-    int stacks, validProduction = 0;
+    int stacks, validProduction = 0, total_cost = 0;
     char proceed;
 
     printf("Production cost for this week is %d Energon for 1 cube.\n", generationCost);
@@ -259,7 +259,7 @@ void generateCubes(int *energon, int *stacksInventory, int generationCost) {
             printf("How many stacks do you wish to produce for this week? ");
             scanf("%d", &stacks);
             if (stacks >= 0) {
-                int total_cost = generationCost * 10 * stacks;
+                total_cost = generationCost * 10 * stacks;
 
                 if (total_cost <= *energon) {
                     printf("%d stacks will cost %d Energon, proceed? (y/n) ", stacks, total_cost);
@@ -299,6 +299,7 @@ void sellCubes(int *energon, int *stacksInventory, int generationCost, int curre
     if (*stacksInventory > 0 && pricePerCube >= 0) {
         int salePricePerStack = pricePerCube * 10;
         int stacks;
+        int total_sale;
         char proceed;
 
         printf("Swindle is buying Energon Cubes for %d Energon per cube.\n", pricePerCube);
@@ -317,7 +318,7 @@ void sellCubes(int *energon, int *stacksInventory, int generationCost, int curre
                     scanf(" %c", &proceed);
                     if (proceed == 'y' || proceed == 'Y') {
                         // Calculate earnings and update inventory
-                        int total_sale = salePricePerStack * stacks;
+                        total_sale = salePricePerStack * stacks;
                         *energon += total_sale;
                         *stacksInventory -= stacks;
                         printf("%d stacks sold.\n", stacks);

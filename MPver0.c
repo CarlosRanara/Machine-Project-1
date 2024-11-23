@@ -1,5 +1,5 @@
-/***************************************************************
-*************
+/**************************************************************
+**********
 This is to certify that this project is my own work, based on my personal efforts
 in studying and applying the concepts learned. I have constructed the
 functions and their respective algorithms and corresponding code by myself.
@@ -158,7 +158,7 @@ void displayStatus(int week, int day, int energon, int stacksInventory) {
  * @param generationCost The cost to produce one Energon cube.
  */
 void generateCubes(int *energon, int *stacksInventory, int generationCost) {
-    int stacks, validProduction = 0;
+    int stacks, validProduction = 0, total_cost = 0;
     char proceed;
 
     printf("Production cost for this week is %d Energon for 1 cube.\n", generationCost);
@@ -169,7 +169,7 @@ void generateCubes(int *energon, int *stacksInventory, int generationCost) {
             scanf("%d", &stacks);
             
             if (stacks >= 0) {
-                int total_cost = generationCost * 10 * stacks;
+                total_cost = generationCost * 10 * stacks;
 
                 if (total_cost <= *energon) {
                     printf("%d stacks will cost %d Energon, proceed? (y/n) ", stacks, total_cost);
@@ -204,13 +204,12 @@ void generateCubes(int *energon, int *stacksInventory, int generationCost) {
 void sellCubes(int *energon, int *stacksInventory, int generationCost, int currentTrend) {
     int pricePerCube = randomPrice(generationCost, currentTrend);
     int validSale = 0;
-
+    int total_sale = 0;
     // Check if there are stacks to sell and a valid price
     if (*stacksInventory > 0 && pricePerCube >= 0) {
         int salePricePerStack = pricePerCube * 10;
         int stacks;
         char proceed;
-
         printf("Swindle is buying Energon Cubes for %d Energon per cube.\n", pricePerCube);
         printf("You can earn %d Energon per stack.\n", salePricePerStack);
 
@@ -227,7 +226,7 @@ void sellCubes(int *energon, int *stacksInventory, int generationCost, int curre
                     scanf(" %c", &proceed);
                     if (proceed == 'y' || proceed == 'Y') {
                         // Calculate earnings and update inventory
-                        int total_sale = salePricePerStack * stacks;
+                        total_sale = salePricePerStack * stacks;
                         *energon += total_sale;
                         *stacksInventory -= stacks;
                         printf("%d stacks sold.\n", stacks);
