@@ -46,12 +46,15 @@ int main() {
     int week = 1;                 // Current week in the game
     int stacksInventory = 0;      // Current stacks of Energon in inventory
     int gameOver = 0;             // Flag to track if the game is over
-    int reachedGoal = 0;          // Flag to track if the goal of 1,000,000 Energon is reached
-
+    int reachedGoal = 0;         // Flag to track if the goal of 1,000,000 Energon is reached
+    int generationCost = 0;
+    int currentTrend = 0;
+    char devMode;
+    
     srand(time(0));  // Seed the random number generator for market prices and trends
 
     // Developer mode to modify Energon and week for testing
-    char devMode;
+    
     printf("Enter developer mode? (y/n): ");
     scanf(" %c", &devMode);
 
@@ -77,10 +80,10 @@ int main() {
             printf("\n --- Week %d Day 1 ---\n", week);
             displayStatus(week, 1, energon, stacksInventory);
 
-            int generationCost = rand() % 41 + 80;  // Random generation cost between 80 and 120
+            generationCost = rand() % 41 + 80;  // Random generation cost between 80 and 120
             generateCubes(&energon, &stacksInventory, generationCost);
 
-            int currentTrend = rand() % 3;  // Random market trend (0, 1, or 2)
+            currentTrend = rand() % 3;  // Random market trend (0, 1, or 2)
 
             for (int day = 2; day <= 7 && gameOver == 0; day++) {
                 printf("\n --- Week %d Day %d ---\n", week, day);
@@ -170,7 +173,7 @@ void generateCubes(int *energon, int *stacksInventory, int generationCost) {
             
             if (stacks >= 0) {
                 total_cost = generationCost * 10 * stacks;
-
+ 
                 if (total_cost <= *energon) {
                     printf("%d stacks will cost %d Energon, proceed? (y/n) ", stacks, total_cost);
                     scanf(" %c", &proceed);
@@ -205,11 +208,12 @@ void sellCubes(int *energon, int *stacksInventory, int generationCost, int curre
     int pricePerCube = randomPrice(generationCost, currentTrend);
     int validSale = 0;
     int total_sale = 0;
+    int salePricePerStack = 0;
+    int stacks;
+    char proceed;
     // Check if there are stacks to sell and a valid price
     if (*stacksInventory > 0 && pricePerCube >= 0) {
-        int salePricePerStack = pricePerCube * 10;
-        int stacks;
-        char proceed;
+        salePricePerStack = pricePerCube * 10;
         printf("Swindle is buying Energon Cubes for %d Energon per cube.\n", pricePerCube);
         printf("You can earn %d Energon per stack.\n", salePricePerStack);
 

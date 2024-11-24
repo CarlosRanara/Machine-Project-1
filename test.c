@@ -42,7 +42,8 @@ int main() {
         int stacksInventory = 0;
         int gameOver = 0;
         int reachedGoal = 0;
-
+        int generationCost = 0;
+        int currentTrend = 0;
         char devMode;
         printf("Enter developer mode? (y/n): ");
         while (1) {
@@ -72,10 +73,10 @@ int main() {
             printf("\n --- Week %d Day 1 ---\n", week);
             displayStatus(week, 1, energon, stacksInventory);
 
-            int generationCost = rand() % 41 + 80;
+             generationCost = rand() % 41 + 80;
             generateCubes(&energon, &stacksInventory, generationCost);
 
-            int currentTrend = rand() % 3;
+             currentTrend = rand() % 3;
 
             for (int day = 2; day <= 7; day++) {
                 printf("\n --- Week %d Day %d ---\n", week, day);
@@ -209,6 +210,14 @@ void testExpireCubes() {
  * @param currentTrends The current market trend affecting the price.
  * @return A randomly generated price for a single Energon cube.
  */
+/* This function generates a random price for Energon cubes based on the 
+ * production cost and the current market trend.
+ * Precondition: generationCost must be a positive integer, and currentTrends must 
+ * be one of the defined market trends (SCRAP, NOMINAL, or PRIMUS).
+ * @param generationCost The cost to produce one Energon cube.
+ * @param currentTrends The current market trend affecting the price.
+ * @return A randomly generated price for a single Energon cube.
+ */
 int randomPrice(int generationCost, int currentTrends) {
     int minPrice, maxPrice;
 
@@ -258,6 +267,7 @@ void generateCubes(int *energon, int *stacksInventory, int generationCost) {
     while (validProduction == 0) {
             printf("How many stacks do you wish to produce for this week? ");
             scanf("%d", &stacks);
+            
             if (stacks >= 0) {
                 total_cost = generationCost * 10 * stacks;
 
@@ -294,14 +304,13 @@ void generateCubes(int *energon, int *stacksInventory, int generationCost) {
 void sellCubes(int *energon, int *stacksInventory, int generationCost, int currentTrend) {
     int pricePerCube = randomPrice(generationCost, currentTrend);
     int validSale = 0;
-
+    int total_sale = 0;
+    int salePricePerStack = 0;
+    int stacks;
+    char proceed;
     // Check if there are stacks to sell and a valid price
     if (*stacksInventory > 0 && pricePerCube >= 0) {
-        int salePricePerStack = pricePerCube * 10;
-        int stacks;
-        int total_sale;
-        char proceed;
-
+        salePricePerStack = pricePerCube * 10;
         printf("Swindle is buying Energon Cubes for %d Energon per cube.\n", pricePerCube);
         printf("You can earn %d Energon per stack.\n", salePricePerStack);
 
