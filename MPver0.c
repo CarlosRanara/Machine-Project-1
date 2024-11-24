@@ -64,6 +64,7 @@ int main ()
                 scanf ("%d", &energon);
                 printf ("Enter starting week (1-10): ");
                 scanf ("%d", &week);
+
                 if (week < 1 || week > 10) {
                         printf ("Invalid week. Setting to week 1.\n");
                         week = 1;
