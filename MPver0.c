@@ -249,7 +249,7 @@ void sellCubes (int *energon, int *stacksInventory, int generationCost, int curr
                                    printf ("Not enough stacks in inventory. You have %d stacks available.\n", *stacksInventory);
                     } else 
                             printf ("Invalid input. Please enter a non-negative integer.\n");
-            }
+                }
         } else {
                 if (*stacksInventory <= 0) printf ("No stacks available to sell.\n");
                 if (pricePerCube < 0) printf ("Sale aborted due to invalid market trend.\n");
