@@ -313,6 +313,7 @@ void sellCubes(int *energon, int *stacksInventory, int generationCost, int curre
         salePricePerStack = pricePerCube * 10;
         printf("Swindle is buying Energon Cubes for %d Energon per cube.\n", pricePerCube);
         printf("You can earn %d Energon per stack.\n", salePricePerStack);
+ 
 
         // Loop until valid sale input is given
         while (validSale == 0) {
