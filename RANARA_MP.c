@@ -51,11 +51,11 @@ int main ()
         int generationCost = 0;     //Random Cost for every Day 1 of every week
         int currentTrend = 0;       // Market trend
         char devMode;
-    
+
         srand (time (0));  // Seed the random number generator for market prices and trends
 
         // Developer mode to modify Energon and week for testing
-    
+
         printf ("Enter developer mode? (y/n): ");
         scanf (" %c", &devMode);
 
